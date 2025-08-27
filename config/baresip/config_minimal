@@ -1,0 +1,68 @@
+# Minimal Baresip configuration for Voice AI Agent
+
+# Core settings
+poll_method             select
+sip_listen              0.0.0.0:5060
+
+# Audio settings - using macOS AudioUnit
+audio_player            audiounit,default
+audio_source            audiounit,default
+audio_alert             audiounit,default
+ausrc_srate             8000
+auplay_srate            8000
+ausrc_channels          1
+auplay_channels         1
+
+# RTP settings
+rtp_tos                 184
+rtcp_mux                no
+jitter_buffer_delay     5-10
+rtp_timeout             60
+
+# Network
+dns_server              8.8.8.8:53
+dns_fallback            8.8.8.8:53
+
+# STUN for NAT traversal
+stun_server             stun:stun.l.google.com:19302
+nat_traversal           stun
+medianat                stun
+
+# Module path
+module_path             /opt/homebrew/lib/baresip/modules
+
+# Essential modules only
+module                  stdio.so
+module                  cons.so
+module                  httpd.so
+module                  ctrl_tcp.so
+
+# Audio codecs
+module                  g711.so
+
+# Audio modules
+module                  aubridge.so
+module                  aufile.so
+module                  auresamp.so
+module                  audiounit.so
+
+# Network modules
+module                  stun.so
+module                  ice.so
+module                  turn.so
+module                  uuid.so
+
+# SIP account modules
+module                  account.so
+module                  contact.so
+module                  menu.so
+
+# Security
+module                  srtp.so
+
+# HTTP and TCP control
+http_listen             0.0.0.0:8080
+ctrl_tcp_listen         0.0.0.0:4444
+
+# Logging
+log_level               info

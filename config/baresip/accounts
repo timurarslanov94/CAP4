@@ -1,0 +1,5 @@
+# SIP Account configuration for Exolve
+# Format: <sip:user@domain>;auth_user=<user>;auth_pass=<pass>;outbound="sip:server"
+
+# МТС Exolve account
+<sip:883140776920289@sip.exolve.ru>;auth_user=883140776920289;auth_pass=wZAsvKOKWMv1;outbound="sip:80.75.130.100"

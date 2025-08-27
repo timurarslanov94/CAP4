@@ -1,0 +1,114 @@
+# Baresip configuration for Voice AI Agent
+
+# Core
+poll_method             epoll
+sip_listen              0.0.0.0:5060
+sip_certificate         
+sip_cafile              
+
+# Audio
+# ВАЖНО: Используем aubridge для передачи аудио через named pipes
+# Правильное направление потоков:
+# - Baresip пишет входящий (remote → local) аудио в out.pcm, чтобы мост мог прочитать
+# - Baresip читает исходящий (AI → remote) аудио из in.pcm, который пишет мост
+audio_player            aubridge,/tmp/baresip_audio_out.pcm   
+audio_source            aubridge,/tmp/baresip_audio_in.pcm
+audio_alert             audiounit,default
+ausrc_srate             8000
+auplay_srate            8000
+ausrc_channels          1
+auplay_channels         1
+audio_txmode            poll
+
+# Video
+video_source            
+video_display           
+video_size              352x288
+video_bitrate           512000
+video_fps               25.00
+video_fullscreen        no
+videnc_format           yuv420p
+
+# AVT
+rtp_tos                 184
+rtp_video_tos          136
+rtcp_mux               no
+jitter_buffer_delay     5-10
+rtp_stats              no
+rtp_timeout            60
+
+# Network
+net_interface           
+dns_server              8.8.8.8:53
+dns_server              8.8.4.4:53
+dns_fallback            8.8.8.8:53
+
+# STUN/TURN/ICE
+stun_server             stun:stun.l.google.com:19302
+ice_mode                full
+ice_nomination          regular
+ice_debug               no
+turn_server             
+turn_username           
+turn_password           
+
+# Media NAT traversal
+nat_traversal           stun,turn,ice
+medianat                ice
+
+# Modules to load
+module_path             /opt/homebrew/lib/baresip/modules
+
+# Core modules
+module                  stdio.so
+module                  cons.so
+# module                  evdev.so  # Not available on macOS
+module                  httpd.so
+module                  ctrl_tcp.so
+
+module                  g711.so
+# module                  g722.so  # Not found
+# module                  g726.so  # Not found
+
+# module                  aubuf.so  # Not found
+module                  aubridge.so
+module                  aufile.so
+module                  auresamp.so
+module                  ausine.so
+#module                  audiounit.so  # Отключено - используем aubridge для pipes
+
+module                  ice.so
+module                  stun.so
+module                  turn.so
+module                  uuid.so
+
+module                  account.so
+module                  contact.so
+module                  menu.so
+module                  mwi.so
+#module                  natpmp.so  # Отключено - вызывает ошибку, не критично для работы
+#module                  presence.so  # Отключено - Exolve не поддерживает presence
+module                  srtp.so
+module                  syslog.so
+
+# HTTP server
+http_listen             0.0.0.0:8080
+
+# Control TCP
+ctrl_tcp_listen         0.0.0.0:4444
+
+# Opus codec settings
+opus_bitrate            28000
+opus_stereo             no
+opus_sprop_stereo       no
+opus_cbr                no
+opus_inbandfec          no
+opus_dtx                no
+opus_mirror             no
+opus_complexity         10
+opus_application        audio
+opus_samplerate         48000
+opus_packet_loss        10
+
+# Logging
+log_level               info

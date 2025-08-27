@@ -1,0 +1,23 @@
+# Baresip configuration for pipe audio transport
+# Add these lines to your .baresip/config file
+
+# Audio configuration with pipes
+audio_player    aufile,/tmp/baresip_audio_in.pcm
+audio_source    aufile,/tmp/baresip_audio_out.pcm
+
+# Alternative: using ausine module for low latency
+#audio_player   ausine,8000,1,/tmp/baresip_audio_in.pcm
+#audio_source   ausine,8000,1,/tmp/baresip_audio_out.pcm
+
+# Sample rate and channels
+audio_srate     8000
+audio_channels  1
+
+# Buffer settings for low latency
+audio_buffer    20   # ms
+ausrc_latency   20   # ms
+auplay_latency  20   # ms
+
+# Make sure these modules are loaded
+module          aufile.so
+#module         ausine.so  # if available
